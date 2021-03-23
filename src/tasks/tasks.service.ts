@@ -1,9 +1,9 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateTaskDTO} from './dto/create-task.dto';
-import {InjectRepository} from '@nestjs/typeorm';
-import {TaskRepository} from './task.repository';
-import {Task} from './task.entity';
-import {TaskStatus} from "./task-status.enum";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateTaskDTO } from './dto/create-task.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TaskRepository } from './task.repository';
+import { Task } from './task.entity';
+import { TaskStatus } from './task-status.enum';
 
 @Injectable()
 export class TasksService {
@@ -37,7 +37,7 @@ export class TasksService {
     const found = await this.taskRepository.findOne(id);
 
     if (!found) {
-      throw new NotFoundException(`Task with ID ${id}`);
+      throw new NotFoundException(`Task with ID "${id}"`);
     }
 
     return found;
