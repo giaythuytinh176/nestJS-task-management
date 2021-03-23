@@ -30,4 +30,8 @@ export class TasksService {
     //   return task.id === id;
     // });
   }
+
+  deleteTaskById(id: string) {
+    this.tasks = this.tasks.filter((task: Task) => task.id !== id);
+  }
 }
