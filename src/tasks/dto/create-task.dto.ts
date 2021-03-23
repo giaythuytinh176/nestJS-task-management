@@ -2,10 +2,10 @@ import { IsAlphanumeric, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateTaskDTO {
   @IsNotEmpty()
-  @IsAlphanumeric()
+  // @IsAlphanumeric()
   title: string;
 
   @IsNotEmpty()
-  @IsAlphanumeric()
+  // @IsAlphanumeric()
   description: string;
 }
