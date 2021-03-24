@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import {
   ConflictException,
-  InternalServerErrorException,
+  InternalServerErrorException, NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User> {
       await user.save();
     } catch (e) {
       if (e.code === '23505') {
-        // duplicate username
+        // 23505 duplicate username
         throw new ConflictException('Username already exists.');
       } else {
         throw new InternalServerErrorException();
@@ -31,5 +31,18 @@ export class UserRepository extends Repository<User> {
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
+  }
+
+  async validateUsernamePassword(
+    authCredentials: AuthCredentialsDto,
+  ): Promise<string> {
+    const { username: username, password: password } = authCredentials;
+    const user = await this.findOne({ username: username });
+
+    if (user && (await user.validatePassword(password))) {
+      return user.username;
+    } else {
+      return null;
+    }
   }
 }
