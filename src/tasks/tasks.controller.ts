@@ -34,9 +34,8 @@ export class TasksController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   createTask(
-    @Body() createTaskDto: CreateTaskDTO,
+    @Body(ValidationPipe) createTaskDto: CreateTaskDTO,
     // @Ip() ip: string,
     // @Req() request: Request,
   ): Promise<Task> {
