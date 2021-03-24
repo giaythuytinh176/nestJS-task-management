@@ -5,6 +5,7 @@ import { TaskRepository } from './task.repository';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
 import { DeleteResult } from 'typeorm';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksService {
@@ -12,23 +13,10 @@ export class TasksService {
     @InjectRepository(TaskRepository)
     private taskRepository: TaskRepository,
   ) {}
-  // getAllTasks(): Task[] {
-  //   return this.tasks;
-  // }
-  //
-  // getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
-  //   const { status: status, search: search } = filterDto;
-  //   let tasks = this.getAllTasks();
-  //   if (status) {
-  //     tasks = tasks.filter((task: Task) => task.status === status);
-  //   }
-  //   if (search) {
-  //     tasks = tasks.filter((task: Task) => {
-  //       return task.title.includes(search) || task.description.includes(search);
-  //     });
-  //   }
-  //   return tasks;
-  // }
+
+  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    return this.taskRepository.getTasks(filterDto);
+  }
 
   async createTask(createTaskDto: CreateTaskDTO): Promise<Task> {
     return this.taskRepository.createTask(createTaskDto);
