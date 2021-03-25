@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,8 +21,10 @@ import { Task } from './task.entity';
 import { DeleteResult } from 'typeorm';
 import { Request } from 'express';
 import { TaskStatus } from './task-status.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 

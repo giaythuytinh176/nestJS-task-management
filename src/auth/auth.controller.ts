@@ -1,7 +1,8 @@
 import {
   Body,
   Controller,
-  Post, Req,
+  Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -10,12 +11,12 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
 import { AccessTokenInterface } from './accesstoken.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './get-user.decorator';
+import { User } from './user.entity';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-      private readonly authService: AuthService
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/signup')
   signUp(
@@ -35,7 +36,7 @@ export class AuthController {
 
   @Post('/test')
   @UseGuards(AuthGuard())
-  test(@Req() req) {
-    console.log(req);
+  test(@GetUser() user: User) {
+    console.log('user', user);
   }
 }
