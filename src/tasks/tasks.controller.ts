@@ -52,23 +52,28 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
-    return this.tasksService.getTaskById(id);
+  getTaskById(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return this.tasksService.getTaskById(id, user);
   }
 
   @Delete('/:id')
   async deleteTaskById(
     @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
   ): Promise<DeleteResult> {
     // return this.tasksService.deleteTaskById(id);
-    return this.tasksService.deleteTask(id);
+    return this.tasksService.deleteTask(id, user);
   }
 
   @Patch('/:id/status')
   updateTaskStatusById(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @GetUser() user: User,
   ): Promise<Task> {
-    return this.tasksService.updateTaskStatusById(id, status);
+    return this.tasksService.updateTaskStatusById(id, status, user);
   }
 }
