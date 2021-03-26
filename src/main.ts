@@ -10,7 +10,7 @@ async function bootstrap() {
 
     // var cors = require('cors');
     // app.use(cors()); // Use this after the variable declaration
-    if (process.env.NODE_EVN === 'production') {
+    if (process.env.NODE_ENV === 'production') {
         app.enableCors({origin: serverConfig.origin});
         logger.log(`Accepting request from origin "${serverConfig.origin}"`);
     } else {
