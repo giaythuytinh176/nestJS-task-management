@@ -5,4 +5,4 @@ db:
   synchronize: true
 
 jwt:
-    secret: 'TamLe176'
+  secret: 'TamLe176'
