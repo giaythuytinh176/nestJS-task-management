@@ -28,7 +28,7 @@ describe('TasksService', () => {
         }).compile();
 
         tasksService = await module.get<TasksService>(TasksService);
-        console.log('tasksService', taskRepository);
+        // console.log('tasksService', taskRepository);
         taskRepository = await module.get<TaskRepository>(TaskRepository);
     });
 
