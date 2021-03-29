@@ -3,3 +3,6 @@ server:
 
 db:
   synchronize: false
+
+#jwt:
+#  secret: 'TamLe176'

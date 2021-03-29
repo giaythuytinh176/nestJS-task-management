@@ -4,5 +4,5 @@ db:
   password: 'postgres'
   synchronize: true
 
-jwt:
-  secret: 'TamLe176'
+#jwt:
+#  secret: 'TamLe176'
