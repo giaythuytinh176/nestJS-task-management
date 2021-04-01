@@ -6,6 +6,10 @@ import {User} from "./user.entity";
 
 const mockCredentialsDto = {username: 'TestUserName', password: 'TestPassword'};
 
+const mockUserRepository = () => ({
+    findOne: jest.fn(),
+});
+
 describe('UserRepository', () => {
     let userRepository;
 
@@ -13,7 +17,7 @@ describe('UserRepository', () => {
         const module = await Test.createTestingModule({
             providers: [
                 UserRepository,
-
+                {provide: UserRepository, useFactory: mockUserRepository},
             ]
         }).compile();
 
@@ -26,20 +30,21 @@ describe('UserRepository', () => {
             save = jest.fn();
             userRepository.create = jest.fn().mockReturnValue({save: save});
         });
+
         it('successfully sign up the user', () => {
             save.mockResolvedValue(undefined);
             expect(userRepository.signUp(mockCredentialsDto)).resolves.not.toThrow();
         })
 
-        // it('throws a conflict exceptions as username already exists', () => {
-        //     save.mockRejectedValue({code: '23505'});
-        //     expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(ConflictException);
-        // });
-        //
-        // it('throws a conflict exception as username already exists', () => {
-        //     save.mockRejectedValue({code: '123123'}); // unhandled error code
-        //     expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(InternalServerErrorException);
-        // });
+        it('throws a conflict exceptions as username already exists', async () => {
+            save.mockRejectedValue({code: '23505'});
+            expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(ConflictException);
+        });
+        
+        it('throws a conflict exception as username already exists', async() => {
+            save.mockRejectedValue({code: '123123'}); // unhandled error code
+            expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(InternalServerErrorException);
+        });
     });
 
 
