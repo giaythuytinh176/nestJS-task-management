@@ -3,8 +3,8 @@ import {UserRepository} from './user.repository';
 import {InjectRepository} from '@nestjs/typeorm';
 import {AuthCredentialsDto} from './dto/auth-credentials.dto';
 import {JwtService} from '@nestjs/jwt';
-import {JwtPayloadInterface} from './jwt-payload.interface';
-import {AccessTokenInterface} from './accesstoken.interface';
+import {JwtPayloadInterface} from './interface/jwt-payload.interface';
+import {AccessTokenInterface} from './interface/accesstoken.interface';
 
 @Injectable()
 export class AuthService {
