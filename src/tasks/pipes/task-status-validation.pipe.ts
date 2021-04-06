@@ -1,4 +1,4 @@
-import {PipeTransform, BadRequestException} from '@nestjs/common';
+import {PipeTransform, BadRequestException, ArgumentMetadata} from '@nestjs/common';
 import {TaskStatus} from '../task-status.enum';
 
 export class TaskStatusValidationPipe implements PipeTransform {
@@ -8,7 +8,9 @@ export class TaskStatusValidationPipe implements PipeTransform {
         TaskStatus.DONE,
     ];
 
-    transform(value: any) {
+    transform(value: any, metadata: ArgumentMetadata) {
+        console.log('TaskStatusValidationPipe: value ', value);
+        console.log('TaskStatusValidationPipe: metadata ', metadata);
         value = value.toUpperCase();
         console.log('Request ... TaskStatusValidationPipe');
         if (!this.isStatusValid(value)) {

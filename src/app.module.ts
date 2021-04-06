@@ -1,10 +1,11 @@
-import {MiddlewareConsumer, Module, NestModule, RequestMethod} from '@nestjs/common';
+import {MiddlewareConsumer, Module, NestModule, RequestMethod, UseFilters} from '@nestjs/common';
 import {TasksModule} from './tasks/tasks.module';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {typeOrmConfig} from './config/typeorm.config';
 import {AuthModule} from './auth/auth.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { TasksController } from './tasks/tasks.controller';
+import { HttpExceptionFilter } from './ExceptionFilters/http-exception.filter';
 
 @Module({
     imports: [

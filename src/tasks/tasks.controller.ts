@@ -11,6 +11,7 @@ import {
     Post,
     Query,
     Req,
+    UseFilters,
     UseGuards,
     UsePipes,
     ValidationPipe,
@@ -26,9 +27,12 @@ import {TaskStatus} from './task-status.enum';
 import {AuthGuard} from '@nestjs/passport';
 import {GetUser} from '../auth/get-user.decorator';
 import {User} from '../auth/user.entity';
+import { HttpExceptionFilter } from 'src/ExceptionFilters/http-exception.filter';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
+// load HttpExceptionFilter
+// @UseFilters(HttpExceptionFilter)
 export class TasksController {
     private logger = new Logger('TasksController');
 
