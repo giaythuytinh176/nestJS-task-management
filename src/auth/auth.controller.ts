@@ -17,6 +17,8 @@ import {User} from './user.entity';
 import { HttpExceptionFilter } from 'src/ExceptionFilters/http-exception.filter';
 
 @Controller('auth')
+// load HttpExceptionFilter
+@UseFilters(HttpExceptionFilter)
 export class AuthController {
     constructor(private readonly authService: AuthService) {
     }

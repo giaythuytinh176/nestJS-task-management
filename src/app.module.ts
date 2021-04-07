@@ -6,6 +6,7 @@ import {AuthModule} from './auth/auth.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { TasksController } from './tasks/tasks.controller';
 import { HttpExceptionFilter } from './ExceptionFilters/http-exception.filter';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
     imports: [
@@ -24,11 +25,11 @@ export class AppModule implements NestModule {
           .apply(LoggerMiddleware)
           // .forRoutes('tasks');
          // .forRoutes({ path: 'tasks', method: RequestMethod.POST });
-         .exclude(
-            { path: 'tasks', method: RequestMethod.GET },
-            { path: 'tasks', method: RequestMethod.POST },
-            // 'tasks/(.*)',
-          )
-         .forRoutes(TasksController);
+        //  .exclude(
+        //     { path: 'tasks', method: RequestMethod.GET },
+        //     { path: 'tasks', method: RequestMethod.POST },
+        //     // 'tasks/(.*)', 
+        //   )
+         .forRoutes(TasksController, AuthController);
    }
 }

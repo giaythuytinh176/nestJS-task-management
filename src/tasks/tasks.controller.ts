@@ -13,6 +13,7 @@ import {
     Req,
     UseFilters,
     UseGuards,
+    UseInterceptors,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -24,15 +25,24 @@ import {Task} from './task.entity';
 import {DeleteResult} from 'typeorm';
 import {Request} from 'express';
 import {TaskStatus} from './task-status.enum';
-import {AuthGuard} from '@nestjs/passport';
+ import {AuthGuard} from '@nestjs/passport';
 import {GetUser} from '../auth/get-user.decorator';
 import {User} from '../auth/user.entity';
-import { HttpExceptionFilter } from 'src/ExceptionFilters/http-exception.filter';
+import { HttpExceptionFilter } from '../ExceptionFilters/http-exception.filter';
+import { LoggingInterceptor } from '../interceptors/logging.interceptor';
+import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
+import { ErrorsInterceptor } from 'src/interceptors/errors.interceptor';
+import { TimeoutInterceptor } from 'src/interceptors/timeout.interceptor';
+//import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
 // load HttpExceptionFilter
-// @UseFilters(HttpExceptionFilter)
+@UseInterceptors(LoggingInterceptor)
+@UseInterceptors(TransformInterceptor)
+@UseInterceptors(TimeoutInterceptor)
+// @UseInterceptors(ErrorsInterceptor)
+@UseFilters(HttpExceptionFilter)
 export class TasksController {
     private logger = new Logger('TasksController');
 
@@ -70,7 +80,7 @@ export class TasksController {
     }
 
     @Get('/:id')
-    getTaskById(
+    async getTaskById(
         @Param('id', ParseIntPipe) id: number,
         @GetUser() user: User,
     ): Promise<Task> {
@@ -79,6 +89,7 @@ export class TasksController {
                 id: id,
             })}`,
         );
+        await new Promise(r => setTimeout(r, 2000));
         return this.tasksService.getTaskById(id, user);
     }
 
@@ -97,11 +108,14 @@ export class TasksController {
     }
 
     @Patch('/:id/status')
-    updateTaskStatusById(
+    async updateTaskStatusById(
         @Param('id', ParseIntPipe) id: number,
         @Body('status', TaskStatusValidationPipe) status: TaskStatus,
         @GetUser() user: User,
     ): Promise<Task> {
+        await new Promise(r => setTimeout(r, 5000));
+
+        console.log('5');
         this.logger.verbose(
             `User "${user.username}" updating a task. Data: ${JSON.stringify({
                 id: id,
