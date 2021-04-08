@@ -42,7 +42,7 @@ import { TimeoutInterceptor } from 'src/interceptors/timeout.interceptor';
 @UseInterceptors(TransformInterceptor)
 @UseInterceptors(TimeoutInterceptor)
 // @UseInterceptors(ErrorsInterceptor)
-@UseFilters(HttpExceptionFilter)
+// @UseFilters(HttpExceptionFilter)
 export class TasksController {
     private logger = new Logger('TasksController');
 
