@@ -34,13 +34,14 @@ import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { ErrorsInterceptor } from 'src/interceptors/errors.interceptor';
 import { TimeoutInterceptor } from 'src/interceptors/timeout.interceptor';
 //import { AuthGuard } from 'src/auth/auth.guard';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
 // load HttpExceptionFilter
 @UseInterceptors(LoggingInterceptor)
 @UseInterceptors(TransformInterceptor)
-@UseInterceptors(TimeoutInterceptor)
+
 // @UseInterceptors(ErrorsInterceptor)
 // @UseFilters(HttpExceptionFilter)
 export class TasksController {
@@ -63,6 +64,7 @@ export class TasksController {
     }
 
     @Post()
+    @Throttle(1,1)
     createTask(
         @Body(ValidationPipe) createTaskDto: CreateTaskDTO,
         // @Ip() ip: string,
@@ -108,12 +110,13 @@ export class TasksController {
     }
 
     @Patch('/:id/status')
+    @UseInterceptors(TimeoutInterceptor)    
     async updateTaskStatusById(
         @Param('id', ParseIntPipe) id: number,
         @Body('status', TaskStatusValidationPipe) status: TaskStatus,
         @GetUser() user: User,
     ): Promise<Task> {
-        await new Promise(r => setTimeout(r, 5000));
+        // await new Promise(r => setTimeout(r, 5000));
 
         console.log('5');
         this.logger.verbose(

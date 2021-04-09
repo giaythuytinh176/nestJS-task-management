@@ -7,8 +7,18 @@ import {JwtModule} from '@nestjs/jwt';
 import {PassportModule} from '@nestjs/passport';
 import {JwtStrategy} from './jwt.strategy';
 import * as config from 'config';
+import { UserSubscriber } from 'src/subscriber/user.subscriber';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard } from '@nestjs/throttler';
+
+
 
 const jwtConfig = config.get('jwt');
+
+const throttlerGuard = {
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard,
+};  
 
 @Module({
     imports: [
@@ -23,10 +33,14 @@ const jwtConfig = config.get('jwt');
         }),
         TypeOrmModule.forFeature([UserRepository]),
     ],
-    controllers: [AuthController],
+    controllers: [
+        AuthController,
+    ],
     providers: [
         AuthService,
         JwtStrategy,
+        UserSubscriber,
+        throttlerGuard,
     ],
     exports: [
         JwtStrategy,

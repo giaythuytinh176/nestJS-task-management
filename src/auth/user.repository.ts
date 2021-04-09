@@ -1,4 +1,4 @@
-import {EntityRepository, Repository} from 'typeorm';
+import {Connection, EntityRepository, Repository} from 'typeorm';
 import {User} from './user.entity';
 import {AuthCredentialsDto} from './dto/auth-credentials.dto';
 import {
@@ -9,6 +9,7 @@ import * as bcrypt from 'bcryptjs';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         const {username: username, password: password} = authCredentialsDto;
 

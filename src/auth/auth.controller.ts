@@ -14,7 +14,8 @@ import {AccessTokenInterface} from './interface/accesstoken.interface';
 import {AuthGuard} from '@nestjs/passport';
 import {GetUser} from './get-user.decorator';
 import {User} from './user.entity';
-import { HttpExceptionFilter } from 'src/ExceptionFilters/http-exception.filter';
+import { HttpExceptionFilter } from '../ExceptionFilters/http-exception.filter';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 // load HttpExceptionFilter
@@ -32,6 +33,7 @@ export class AuthController {
     }
 
     @Post('/signin')
+    @SkipThrottle()
     signIn(
         @Body(ValidationPipe)
             authCredentialsDto: AuthCredentialsDto,
