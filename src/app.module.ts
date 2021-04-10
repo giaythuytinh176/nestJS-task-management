@@ -1,4 +1,4 @@
-import {MiddlewareConsumer, Module, NestModule, RequestMethod, UseFilters} from '@nestjs/common';
+import {CacheModule, MiddlewareConsumer, Module, NestModule, RequestMethod, UseFilters} from '@nestjs/common';
 import {TasksModule} from './tasks/tasks.module';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {typeOrmConfig} from './config/typeorm.config';
@@ -13,6 +13,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
     imports: [
+        // CacheModule.register(),
         TypeOrmModule.forRootAsync({
             useFactory: async () =>
               Object.assign(await getConnectionOptions(), {
@@ -22,7 +23,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
         TasksModule,
         AuthModule,
         ThrottlerModule.forRoot({
-          ttl: 60, // seconds
+          ttl: 30, // seconds
           limit: 5, 
         }),
         // SequelizeModule.forRoot({
@@ -35,7 +36,9 @@ import { ThrottlerModule } from '@nestjs/throttler';
         //     models: [],
         //   }),
     ],
-    providers: [],
+    providers: [
+      
+    ],
     exports: [
         // TypeOrmModule, // có thể sử dụng module này ở các module khác nếu họ import module này.
     ],

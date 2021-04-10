@@ -1,8 +1,11 @@
 import {
     Body,
+    CacheInterceptor,
+    CACHE_MANAGER,
     Controller,
     Delete,
     Get,
+    Inject,
     Ip,
     Logger,
     Param,
@@ -47,10 +50,15 @@ import { SkipThrottle, Throttle } from '@nestjs/throttler';
 export class TasksController {
     private logger = new Logger('TasksController');
 
-    constructor(private tasksService: TasksService) {
+    constructor(
+        private tasksService: TasksService,
+        // @Inject(CACHE_MANAGER) private cacheManager: Cache
+        ) {
+
     }
 
     @Get()
+    @UseInterceptors(CacheInterceptor)
     getTasks(
         @Query(ValidationPipe) filterDto: GetTasksFilterDto,
         @GetUser() user: User,
@@ -64,7 +72,7 @@ export class TasksController {
     }
 
     @Post()
-    @Throttle(1,1)
+    @Throttle(2,60)
     createTask(
         @Body(ValidationPipe) createTaskDto: CreateTaskDTO,
         // @Ip() ip: string,
@@ -91,7 +99,7 @@ export class TasksController {
                 id: id,
             })}`,
         );
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 1000));
         return this.tasksService.getTaskById(id, user);
     }
 

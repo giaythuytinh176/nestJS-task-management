@@ -1,11 +1,18 @@
 import {NestFactory} from '@nestjs/core';
-import {Logger} from '@nestjs/common';
+import {Logger, ValidationPipe} from '@nestjs/common';
 import {AppModule} from './app.module';
 import * as config from 'config';
 
 async function bootstrap() {
     const serverConfig = config.get('server');
     const app = await NestFactory.create(AppModule);
+    app.useGlobalPipes(new ValidationPipe({
+        // disableErrorMessages: true, // ko hien thi chi tiet loi cu the khi tra ve client
+        whitelist: true, // chỉ hien thi nhận giá tri theo DTO
+        forbidNonWhitelisted: true, // neu truyen gia tri du thua ngoai DTO se bao loi
+        transform: true, // tu dong chuyen doi dang so Tring sang so bt
+
+      }));
     const logger = new Logger('bootstrap');
 
     // var cors = require('cors');

@@ -1,4 +1,4 @@
-import {Connection, EntityRepository, Repository} from 'typeorm';
+import {Connection, EntityRepository, getConnection, Repository} from 'typeorm';
 import {User} from './user.entity';
 import {AuthCredentialsDto} from './dto/auth-credentials.dto';
 import {
@@ -11,6 +11,47 @@ import * as bcrypt from 'bcryptjs';
 export class UserRepository extends Repository<User> {
 
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+
+        const user = new User();
+        user.username = authCredentialsDto.username;
+        user.salt = await bcrypt.genSalt();
+        user.password = await this.hashPassword(authCredentialsDto.password, user.salt);
+
+        const connection = getConnection();
+        const queryRunner = connection.createQueryRunner();
+
+        // establish real database connection using our new query runner
+        await queryRunner.connect();
+
+        // lets now open a new transaction:
+        await queryRunner.startTransaction();
+
+        try {
+            // execute some operations on this transaction:
+            await queryRunner.manager.save(User, user);
+
+            // commit transaction now:
+            await queryRunner.commitTransaction();
+      
+            // return user;
+          } catch (err) {
+            // since we have errors lets rollback changes we made
+            await queryRunner.rollbackTransaction();
+            if (err.code === '23505') {
+                // 23505 duplicate username
+                throw new ConflictException('Username already exists.');
+            } else {
+                throw new InternalServerErrorException();
+            }
+
+          } finally {
+            // you need to release query runner which is manually created:
+            await queryRunner.release();
+          }
+
+    }
+
+    async signUp_(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         const {username: username, password: password} = authCredentialsDto;
 
         // const user = new User();

@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common';
+import {CacheModule, CACHE_MANAGER, Module} from '@nestjs/common';
 import {TasksController} from './tasks.controller';
 import {TasksService} from './tasks.service';
 import {TypeOrmModule} from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { TaskSubscriber } from '../subscriber/task.subscriber';
 
 @Module({
     imports: [
+        CacheModule.register(),
         TypeOrmModule.forFeature([TaskRepository]),
         AuthModule,
     ],

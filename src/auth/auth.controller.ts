@@ -25,10 +25,12 @@ export class AuthController {
     }
 
     @Post('/signup')
+    @Throttle(2,5)
     signUp(
-        @Body(ValidationPipe)
+        @Body()
             authCredentialsDto: AuthCredentialsDto,
     ): Promise<void> {
+        console.log('authCredentialsDto', authCredentialsDto);
         return this.authService.signUp(authCredentialsDto);
     }
 
