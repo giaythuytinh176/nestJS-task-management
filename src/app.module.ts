@@ -7,7 +7,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { TasksController } from './tasks/tasks.controller';
 import { HttpExceptionFilter } from './ExceptionFilters/http-exception.filter';
 import { AuthController } from './auth/auth.controller';
-import { getConnectionOptions } from 'typeorm';
+import { Connection, getConnectionOptions } from 'typeorm';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ThrottlerModule } from '@nestjs/throttler';
 
@@ -44,6 +44,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ],
 })
 export class AppModule implements NestModule {
+    // constructor(private connection: Connection) {}
     async configure(consumer: MiddlewareConsumer) {
         await consumer
           .apply(LoggerMiddleware)

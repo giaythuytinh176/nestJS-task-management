@@ -11,7 +11,7 @@ export class TaskRepository extends Repository<Task> {
     private logger = new Logger('TaskRepository');
 
     async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
-        
+
         const {status: status, search: search} = filterDto;
         const query = this.createQueryBuilder('task');
 

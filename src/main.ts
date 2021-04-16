@@ -10,7 +10,7 @@ async function bootstrap() {
         // disableErrorMessages: true, // ko hien thi chi tiet loi cu the khi tra ve client
         whitelist: true, // chỉ hien thi nhận giá tri theo DTO
         forbidNonWhitelisted: true, // neu truyen gia tri du thua ngoai DTO se bao loi
-        transform: true, // tu dong chuyen doi dang so Tring sang so bt
+        transform: true, // tu dong chuyen doi dang so sTring sang so bt
 
       }));
     const logger = new Logger('bootstrap');
